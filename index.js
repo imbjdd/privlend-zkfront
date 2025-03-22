@@ -47,6 +47,12 @@ async function generateProof(credit_score) {
 		const isValid = await backend.verifyProof(proof);
 		show("logs", `Proof is ${isValid ? "valid" : "invalid"}... ✅`);
 		
+		window.parent.postMessage({
+			type: 'proof',
+			value: proof.proof,
+			isValid: isValid
+		}, '*');
+		
 		proofGenerated = true;
 		
 		const submitButton = document.getElementById("submit");
