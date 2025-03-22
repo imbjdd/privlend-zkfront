@@ -1,30 +1,24 @@
-
 <!DOCTYPE html>
+<html lang="en">
 <head>
-  <style>
-    .outer {
-        display: flex;
-        justify-content: space-between;
-        width: 100%;
-    }
-    .inner {
-        width: 45%;
-        border: 1px solid black;
-        padding: 10px;
-        word-wrap: break-word;
-    }
-  </style>
-  <script type="module" crossorigin src="/assets/index-BCIJH6v7.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script type="module" crossorigin src="/assets/index-DJqEkTEk.js"></script>
 </head>
-<body>
-  <h1>Noir app</h1>
-  <div class="input-area">
-    <input id="age" type="number" placeholder="Enter age" />
-    <button id="submit">Submit Age</button>
+<body class="p-4">
+  <div class="flex justify-between w-full">
+    <div class="w-[45%] border border-black p-4 break-words hidden">
+      <h2 id="logs">Logs</h2>
+    </div>
   </div>
-  <div class="outer">
-    <div id="logs" class="inner"><h2>Logs</h2></div>
-    <div id="results" class="inner"><h2>Proof</h2></div>
+  <h2 id="verification-status" class="text-xl font-bold text-center mb-4"></h2>
+  <div class="bg-white p-6 rounded-lg shadow-md max-w-md mx-auto">
+    <h2 class="text-xl font-bold mb-4">ZK Proof</h2>
+    <div class="text-sm font-mono bg-gray-100 p-4 rounded-md text-wrap overflow-x-hidden">
+      <p class="text-wrap" id="results"></p>
+    </div>
   </div>
 </body>
 </html>

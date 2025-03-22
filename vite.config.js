@@ -4,5 +4,13 @@ export default defineConfig({
   build: {
     target: 'esnext',  
   },
+  server: {
+    target: 'esnext',
+  },
+  optimizeDeps: {
+    esbuildOptions: {
+      target: 'esnext',
+    }
+  },
 });
 

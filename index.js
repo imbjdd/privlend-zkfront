@@ -10,6 +10,8 @@ await Promise.all([initACVM(fetch(acvm)), initNoirC(fetch(noirc))]);
 import main from "./circuit/src/main.nr?url";
 import nargoToml from "./circuit/Nargo.toml?url";
 
+let proofGenerated = false;
+
 export async function getCircuit() {
 	const fm = createFileManager("/");
 	const { body } = await fetch(main);
@@ -25,15 +27,17 @@ const show = (id, content) => {
 	container.appendChild(document.createElement("br"));
 };
 
-document.getElementById("submit").addEventListener("click", async () => {
+async function generateProof(credit_score) {
+	if (proofGenerated) {
+		return;
+	}
+	
 	try {
-		// noir goes here
 		const { program } = await getCircuit();
 		const noir = new Noir(program);
 		const backend = new UltraHonkBackend(program.bytecode);
-		const age = document.getElementById("age").value;
 		show("logs", "Generating witness... ⏳");
-		const { witness } = await noir.execute({ age });
+		const { witness } = await noir.execute({ credit_score });
 		show("logs", "Generated witness... ✅");
 		show("logs", "Generating proof... ⏳");
 		const proof = await backend.generateProof(witness);
@@ -42,8 +46,26 @@ document.getElementById("submit").addEventListener("click", async () => {
 		show("logs", "Verifying proof... ⌛");
 		const isValid = await backend.verifyProof(proof);
 		show("logs", `Proof is ${isValid ? "valid" : "invalid"}... ✅`);
+		
+		proofGenerated = true;
+		
+		const submitButton = document.getElementById("submit");
+		if (submitButton) {
+			submitButton.disabled = true;
+			submitButton.style.opacity = "0.5";
+			submitButton.textContent = "Proof already generated";
+		}
+		
 	} catch (err) {
 		console.error(err);
 		show("logs", "Oh 💔");
+	}
+}
+
+
+window.addEventListener('message', async (event) => {
+	const { type, value } = event.data;
+	if (type === 'creditScore' && !proofGenerated) {
+		await generateProof(value);
 	}
 });
